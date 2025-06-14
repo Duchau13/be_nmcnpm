@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>P2M Drink - Invoice</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style type="text/css">
+    /* Reset styles */
+    * { box-sizing: border-box; }
+    body { 
+      margin: 0; 
+      padding: 0; 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Inter', 'Open Sans', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+    }
+    
+    /* Email container */
+    .email-container {
+      max-width: 650px;
+      margin: 20px auto;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+      padding: 40px 30px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      transform: translate(50px, -50px);
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .logo-section {
+      flex: 1;
+    }
+    
+    .logo {
+      width: 60px;
+      height: 60px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .welcome-text {
+      font-size: 16px;
+      font-weight: 400;
+      opacity: 0.95;
+      line-height: 1.5;
+    }
+    
+    .invoice-section {
+      text-align: right;
+      flex: 1;
+    }
+    
+    .invoice-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .order-info {
+      background: rgba(255,255,255,0.15);
+      padding: 20px;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .order-info div {
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    
+    .order-number {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .status-pending { background: rgba(108, 117, 125, 0.2); color: #6c757d; }
+    .status-confirmed { background: rgba(13, 202, 240, 0.2); color: #0dcaf0; }
+    .status-cancelled { background: rgba(220, 53, 69, 0.2); color: #dc3545; }
+    .status-shipping { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+    .status-delivered { background: rgba(25, 135, 84, 0.2); color: #198754; }
+    
+    /* Content sections */
+    .content-section {
+      padding: 40px 30px;
+    }
+    
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #2d3748;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+    }
+    
+    /* Order items table */
+    .order-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+    
+    .order-table th {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      padding: 16px 12px;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #495057;
+      border-bottom: 1px solid #dee2e6;
+    }
+    
+    .order-table td {
+      padding: 16px 12px;
+      border-bottom: 1px solid #f1f3f4;
+      font-size: 14px;
+    }
+    
+    .order-table tr:hover {
+      background: #f8f9fa;
+    }
+    
+    .product-name {
+      font-weight: 500;
+      color: #ff6b6b;
+    }
+    
+    /* Total section */
+    .total-section {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 12px;
+      padding: 25px;
+      margin: 30px 0;
+    }
+    
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 14px;
+    }
+    
+    .total-row.final {
+      border-top: 2px solid #dee2e6;
+      margin-top: 15px;
+      padding-top: 15px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #2d3748;
+    }
+    
+    /* Information grid */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 30px;
+    }
+    
+    .info-card {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 12px;
+      border-left: 4px solid #ff6b6b;
+    }
+    
+    .info-card h4 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6c757d;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    
+    .info-card p {
+      margin: 8px 0;
+      font-size: 14px;
+      color: #495057;
+    }
+    
+    /* Action buttons */
+    .action-section {
+      background: #f8f9fa;
+      padding: 30px;
+      text-align: center;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      margin: 8px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .btn-success {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      color: white;
+    }
+    
+    .btn-warning {
+      background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+      color: white;
+    }
+    
+    .btn-info {
+      background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);
+      color: white;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+      color: white;
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%);
+      color: white;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    /* Footer */
+    .footer {
+      background: #2d3748;
+      color: #a0aec0;
+      padding: 30px;
+      text-align: center;
+      font-size: 12px;
+    }
+    
+    /* Responsive design */
+    @media only screen and (max-width: 600px) {
+      .email-container {
+        margin: 10px;
+        border-radius: 12px;
+      }
+      
+      .header {
+        padding: 30px 20px;
+      }
+      
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .invoice-section {
+        text-align: center;
+        margin-top: 20px;
+      }
+      
+      .content-section {
+        padding: 30px 20px;
+      }
+      
+      .info-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .order-table {
+        font-size: 12px;
+      }
+      
+      .order-table th,
+      .order-table td {
+        padding: 12px 8px;
+      }
+      
+      .btn {
+        display: block;
+        margin: 10px 0;
+        width: 100%;
+      }
+    }
+    
+    @media only screen and (max-width: 420px) {
+      .header {
+        padding: 20px 15px;
+      }
+      
+      .content-section {
+        padding: 20px 15px;
+      }
+      
+      .invoice-title {
+        font-size: 24px;
+      }
+      
+      .order-table th,
+      .order-table td {
+        padding: 10px 6px;
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-content">
+        <div class="logo-section">
+          <div class="logo">
+            <img src="../assets/img/logos/p2m.png" width="32" height="32" alt="P2M Logo" style="border-radius: 6px;" />
+          </div>
+          <div class="welcome-text">
+            Xin chào <strong>{{info.name_customer}}</strong>,<br>
+            Cảm ơn bạn đã mua sắm tại cửa hàng của chúng tôi!
+          </div>
+        </div>
+        <div class="invoice-section">
+          <div class="invoice-title">HÓA ĐƠN</div>
+          <div class="order-info">
+            <div class="order-number">#HD{{info.id_order}}</div>
+            <div>{{info.time_order}}</div>
+            <div style="margin-top: 12px;">
+              {{#ifcond info.status 0}}
+              <span class="status-badge status-pending">Chưa xác nhận</span>
+              {{/ifcond}}
+              {{#ifcond info.status 1}}
+              <span class="status-badge status-confirmed">Đã xác nhận</span>
+              {{/ifcond}}
+              {{#ifcond info.status 2}}
+              <span class="status-badge status-cancelled">Đã hủy</span>
+              {{/ifcond}}
+              {{#ifcond info.status 3}}
+              <span class="status-badge status-shipping">Đã xác nhận</span>
+              {{/ifcond}}
+              {{#ifcond info.status 4}}
+              <span class="status-badge status-delivered">Đã xác nhận</span>
+              {{/ifcond}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Details -->
+    <div class="content-section">
+      <h3 class="section-title">Chi tiết đơn hàng</h3>
+      <table class="order-table">
+        <thead>
+          <tr>
+            <th>Sản phẩm</th>
+            <th style="text-align: center;">Số lượng</th>
+            <th style="text-align: center;">Đơn giá</th>
+            <th style="text-align: center;">Tổng phụ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each itemList}}
+          <tr>
+            <td class="product-name">{{this.name}}</td>
+            <td style="text-align: center;">{{this.quantity}}</td>
+            <td style="text-align: center;">{{this.price}}</td>
+            <td style="text-align: center; font-weight: 600;">{{this.amount}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+
+      <!-- Total Section -->
+      <div class="total-section">
+        <div class="total-row">
+          <span>Tổng phụ:</span>
+          <span>{{info.item_fee}}</span>
+        </div>
+        <div class="total-row final">
+          <span>Tổng cộng:</span>
+          <span>{{info.item_fee}}</span>
+        </div>
+      </div>
+
+      <!-- Information Grid -->
+      <div class="info-grid">
+        <div class="info-card">
+          <h4>Thông tin giao hàng</h4>
+          <p><strong>Đơn vị vận chuyển:</strong> {{info.name_shipping_partner}}</p>
+          <p><strong>Người giao hàng:</strong> {{info.name_shipper}}</p>
+        </div>
+
+        <div class="info-card">
+          <h4>Phương thức thanh toán</h4>
+          <p>{{info.name_payment}}</p>
+        </div>
+
+        <div class="info-card">
+          <h4>Thông tin khách hàng</h4>
+          <p><strong>Tên:</strong> {{info.name_customer}}</p>
+          <p><strong>SĐT:</strong> {{info.phone}}</p>
+          <p><strong>Ghi chú:</strong> {{info.description}}</p>
+        </div>
+
+        <div class="info-card">
+          <h4>Thông tin thời gian</h4>
+          <p><strong>Đặt hàng:</strong> {{info.time_order}}</p>
+          <p><strong>Xác nhận:</strong> {{info.time_confirm}}</p>
+          <p><strong>Shipper nhận:</strong> {{info.time_shipper_receive}}</p>
+          <p><strong>Giao hàng:</strong> {{info.time_shipper_delivered}}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-section">
+      {{#ifcond info.status 0}}
+        {{#if info.name_shipping_partner}}
+          <a href="/orders/confirm2/{{info.id_order}}" class="btn btn-success">Nhận đơn</a>
+        {{else}}
+          <a href="/orders/confirm/{{info.id_order}}" class="btn btn-success">Hoàn thành</a>
+          <a href="/orders/order/{{info.id_order}}" class="btn btn-warning">Cập nhật thông tin</a>
+          <a href="/orders/getdetail/{{info.id_order}}" class="btn btn-primary">Chi tiết hóa đơn</a>
+          <a href="/orders/cancel/{{info.id_order}}" class="btn btn-danger">Hủy đơn</a>
+        {{/if}}
+      {{else}}
+        <a href="/orders/detail/{{info.id_order}}/1" class="btn btn-warning">In hóa đơn</a>
+      {{/ifcond}}
+      <a href="/orders" class="btn btn-info">Quay lại</a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>&copy; 2025 P2M Drink. Cảm ơn bạn đã tin tương và sử dụng dịch vụ của chúng tôi!</p>
+    </div>
+  </div>
+</body>
+</html>

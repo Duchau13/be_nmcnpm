@@ -1,0 +1,31 @@
+'use strict';
+
+module.exports = {
+  async up (queryInterface, Sequelize) {
+    return queryInterface.bulkInsert("Import_invoices", [
+      {
+        id_staff: 5,
+        id_provider: 1,
+        datetime: "2023-08-12",
+        status: 1,
+        description: "Nhập hàng",
+      },
+      {
+        id_staff: 5,
+        id_provider: 2,
+        datetime: "2023-08-12",
+        status: 1,
+        description: "Nhập hàng",
+      },
+    ]);
+  },
+
+  async down (queryInterface, Sequelize) {
+    /**
+     * Add commands to revert seed here.
+     *
+     * Example:
+     * await queryInterface.bulkDelete('People', null, {});
+     */
+  }
+};
